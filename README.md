@@ -44,7 +44,10 @@ mhold *                 --->  sets hold item * for mapper portal database entry/
 mhold                   --->  displays hold item
 mporlist                --->  lists all portal mapper database entrys
 mpordel #*              --->  deletes portal entry * where * is the portal index (#)
-mlporbag                --->  looks (examines) your portals bag to show which portals you have 
+mlporbag                --->  looks (examines) your portals bag to show which portals you have
+mpr *                   --->  sets your recall portal (good idea to have a mapper portal 'recall' at recall) replace * with the mapper portal index (#)
+mbp *                   --->  sets your bounceportal (normally garbage can or academy portal) for when the mapper or ww's S&D wants to xrt through recall in a no-recall room with a portal, replace * with the mapper portal index (#)
+mbr *                   --->  sets your bouncerecall (for when the mapper or ww's S&D wants to xrt through recall in a no-portal room using a portal) YOU CAN ONLY USE YOUR RECALL PORTAL THAT YOU CREATED WITH mpr * ... replace the * with the portal index (#)
   
 *NOTE 1* : the # is necessary to indicate which portal to delete (the index of the database entry) so for example i wanted to delete portal at index 42 I would use : mpordel #42
 *NOTE 2* : check the portals list after removeing each portal for multiple removals (when 1 is deleted all the ones after go down a digit) 
