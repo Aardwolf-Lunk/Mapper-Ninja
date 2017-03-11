@@ -473,6 +473,19 @@ Note ("Hold Item Set To : ", "%1")</send>
   lock d
   </send>
   </alias>
+  <alias
+   match="rtp"
+   enabled="y"
+   expand_variables="y"
+   sequence="100"
+  >
+  <send>get planes @portals_bag
+  hold planes
+  enter
+  hold @hold_item
+  put planes @portals_bag
+  </send>
+  </alias>
 
 </aliases>
 
