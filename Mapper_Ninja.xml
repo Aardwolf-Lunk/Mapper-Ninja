@@ -1,0 +1,488 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE muclient>
+<!-- Saved on Wednesday, July 22, 2015, 8:59 PM -->
+<!-- MuClient version 4.98 -->
+<!-- Plugin "Mapper_Ninja" -->
+<!--
+Mapper Ninja  - Created 22/07/2015 by Lunk
+-->
+
+<muclient>
+<plugin
+   name="Mapper_Ninja"
+   author="Lunk"
+   id="150081ad403da0b885afb90c"
+   language="Lua"
+   purpose="quick mapper use"
+   save_state="y"
+   date_written="2015-07-22 20:42:19"
+   requires="4.98"
+   version="2"
+   >
+<description trim="y">
+<![CDATA[
+Lunk's : 
+             _____/~~~~~~~~~~~~~~~~~~~~_____
+        ___ /=--- + *  Mapper Ninja  * + ---= ___
+==========================================================
+
+*** MAPPER  MOVEMENT : DATABASE ENTRY ***
+
+mno  --->  enters north through a unlocked door into mapper database
+mea  --->  enters east through a unlocked door into mapper database
+mso  --->  enters south through a unlocked door into mapper database
+mwe  --->  enters west through a unlocked door into mapper database
+mup  --->  enters up through a unlocked door into mapper database
+mdo  --->  enters down through a unlocked door into mapper database
+
+mnol  --->  enters north through a locked door into mapper database
+meal  --->  enters east through a locked door into mapper database
+msol  --->  enters south through a locked door into mapper database
+mwel  --->  enters west through a locked door into mapper database
+mupl  --->  enters up through a locked door into mapper database
+mdol  --->  enters down through a locked door into mapper database
+
+mwait * --->  ONLY use this before attempting to enter a cexit into the database with multiple commands (seperated by ; or ;; if ; is already your command stacking character 
+maze *  --->  enters movement direction (where * is a direction; n, e, s, w, u, d) and destination room into mapper database (good for navigating mazes)
+
+*** MAPPER MOVEMENT : USING DATABASE ***
+
+mgo *  --->  moves player to room i.d *
+
+*** MAPPER SEARCHING ***
+
+mfi *  --->  searches mapper database for room * in current area
+mdb *  --->  searches mapper database for room * (whole database)
+
+*** MAPPER PORTALS ***
+
+mpor1 *                 --->  takes you to the destination of portal *
+mapper portal mpor *    --->  enters portal * into mapper database
+mporbag *               --->  sets * as portals bag
+mporbag                 --->  displays portals bag
+mhold *                 --->  sets hold item * for mapper portal database entry/general use
+mhold                   --->  displays hold item
+mporlist                --->  lists all portal mapper database entrys
+mpordel #*              --->  deletes portal entry * where * is the portal index (#)
+mlporbag                --->  looks (examines) your portals bag to show which portals you have 
+  
+*NOTE 1* : the # is necessary to indicate which portal to delete (the index of the database entry) so for example i wanted to delete portal at index 42 I would use : mpordel #42
+*NOTE 2* : check the portals list after removeing each portal for multiple removals (when 1 is deleted all the ones after go down a digit) 
+
+*** MISC ***
+
+mroom   --->  displays cexits for current room
+mclear  --->  removes custom exit database entrys for the current room
+mxs     --->  sets target room (the room you are in) for current area (requires ww's S&D)
+open    --->  attempts to open all compass direction (n,e,s,w,u,d)
+close   --->  attempts to close all compass directions (n,e,s,w,u,d)
+closel  --->  attempts to close and lock all compass directions (n,e,s,w,u,d)
+mimt    --->  sets current room to mapper ignore mismatch = "true" (use in mazes or rooms where a normal cexit doesn't work)
+mimf    --->  sets current room to mapper ignore mismatch = "false" (if accidentally set to true and any cexit is not working as intended)
+mnpt *  --->  sets current room * (room I.D use "mr") to no-portal = "true" (use if you already know the room is no-portal)
+mnpf *  --->  sets current room * (room I.D use "mr") to no-portal = "false" (use if you mistakenly used mnpt)
+mnrt *  --->  sets current room * (room I.D use "mr") to no-recall = "true" (use if you already know the room is no-recall)
+mnrf *  --->  sets current room * (room I.D use "mr") to no-recall = "false" (use if you mistakenly used mnrt)
+rtp     --->  takes you to the beginning of the upper and lower planes so long as you have amulet of the planes in your portals bag
+
+*NOTE 1* : mapper ignore mismatch is default to false for all rooms in the standard MUSHclient package
+*NOTE 2* : mapper no-portal is default to false for all rooms in the standard MUSHclient package
+*NOTE 3* : the mapper will always take the quickest path with ww's xrt including rooms set as no-portal and/or no recall
+]]>
+</description>
+
+</plugin>
+
+<include name="constants.lua"/>
+
+<aliases>
+  <alias
+   match="meal"
+   enabled="y"
+   group="map"
+   send_to="10"
+   sequence="100"
+  >
+  <send>mapper cexit open e;;e;;close w;;lock w</send>
+  </alias>
+  <alias
+   match="msol"
+   enabled="y"
+   group="map"
+   send_to="10"
+   sequence="100"
+  >
+  <send>mapper cexit open s;;s;;close n;;lock n</send>
+  </alias>
+  <alias
+   match="mwel"
+   enabled="y"
+   group="map"
+   send_to="10"
+   sequence="100"
+  >
+  <send>mapper cexit open w;;w;;close e;;lock e</send>
+  </alias>
+  <alias
+   match="mupl"
+   enabled="y"
+   group="map"
+   send_to="10"
+   sequence="100"
+  >
+  <send>mapper cexit open u;;u;;close d;;lock d</send>
+  </alias>
+  <alias
+   match="maze *"
+   enabled="y"
+   group="map"
+   send_to="10"
+   sequence="100"
+  >
+  <send>mapper cexit %1</send>
+  </alias>
+  <alias
+   match="mdol"
+   enabled="y"
+   group="map"
+   send_to="10"
+   sequence="100"
+  >
+  <send>mapper cexit open d;;d;;close u;;lock u</send>
+  </alias>
+  <alias
+   match="mroom"
+   enabled="y"
+   group="map"
+   send_to="10"
+   sequence="100"
+  >
+  <send>mapper thisroom</send>
+  </alias>
+  <alias
+   match="mfi *"
+   enabled="y"
+   group="map"
+   send_to="10"
+   sequence="100"
+  >
+  <send>mapper area %1</send>
+  </alias>
+  <alias
+   match="mdb *"
+   enabled="y"
+   group="map"
+   send_to="10"
+   sequence="100"
+  >
+  <send>mapper find %1</send>
+  </alias>
+  <alias
+   match="mgo *"
+   enabled="y"
+   group="map"
+   send_to="10"
+   sequence="100"
+  >
+  <send>mapper goto %1</send>
+  </alias>
+  <alias
+   match="mpor1 *"
+   enabled="y"
+   expand_variables="y"
+   group="map"
+   send_to="10"
+   sequence="100"
+  >
+  <send>get %1 @portals_bag
+hold %1
+enter
+hold @hold_item
+put %1 @portals_bag</send>
+  </alias>
+  <alias
+   match="mno"
+   enabled="y"
+   group="map"
+   send_to="10"
+   sequence="100"
+  >
+  <send>mapper cexit open n;;n;;close s</send>
+  </alias> <alias
+   match="mclear"
+   enabled="y"
+   group="map"
+   send_to="10"
+   sequence="100"
+  >
+  <send>mapper delete cexits</send>
+  </alias>
+  <alias
+   match="mpurge *"
+   enabled="y"
+   group="map"
+   send_to="10"
+   sequence="100"
+  >
+  <send>mapper purgezone %1</send>
+  </alias>
+  <alias
+   match="mea"
+   enabled="y"
+   group="map"
+   send_to="10"
+   sequence="100"
+  >
+  <send>mapper cexit open e;;e;;close w</send>
+  </alias>
+
+  <alias
+   match="mso"
+   enabled="y"
+   group="map"
+   send_to="10"
+   sequence="100"
+  >
+  <send>mapper cexit open s;;s;;close n</send>
+  </alias>
+  <alias
+   match="mwe"
+   enabled="y"
+   group="map"
+   send_to="10"
+   sequence="100"
+  >
+  <send>mapper cexit open w;;w;;close e</send>
+  </alias>
+  <alias
+   match="mup"
+   enabled="y"
+   group="map"
+   send_to="10"
+   sequence="100"
+  >
+  <send>mapper cexit open u;;u;;close d</send>
+  </alias>
+  <alias
+   match="mdo"
+   enabled="y"
+   group="map"
+   send_to="10"
+   sequence="100"
+  >
+  <send>mapper cexit open d;;d;;close u</send>
+  </alias>
+  <alias
+   match="mnol"
+   enabled="y"
+   group="map"
+   send_to="10"
+   sequence="100"
+  >
+  <send>mapper cexit open n;;n;;close s;;lock s</send>
+  </alias>
+  <alias
+   match="mwait *"
+   enabled="y"
+   group="map"
+   send_to="10"
+   sequence="100"
+  >
+  <send>mapper cexit_wait %1</send>
+  </alias>
+  
+  <alias
+   match="mporbag"
+   enabled="y"
+   expand_variables="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>GetVariable ("portals_bag") 
+Note ("Portals Bag  : ", "@portals_bag")</send>
+  </alias>
+
+  <alias
+   match="mporbag *"
+   enabled="y"
+   expand_variables="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>GetVariable ("portals_bag") SetVariable ("portals_bag", "%1")
+Note ("Portals Bag Set To : ", "%1")</send>
+  </alias>
+    <alias
+   match="mhold"
+   enabled="y"
+   expand_variables="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>GetVariable ("hold_item") 
+Note ("Hold Item  : ", "@hold_item")</send>
+  </alias>
+
+  <alias
+   match="mhold *"
+   enabled="y"
+   expand_variables="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>GetVariable ("hold_item") SetVariable ("hold_item", "%1")
+Note ("Hold Item Set To : ", "%1")</send>
+  </alias>
+      <alias
+   match="mporlist"
+   enabled="y"
+   expand_variables="y"
+   send_to="10"
+   sequence="100"
+  >
+  <send>mapper portals</send>
+  </alias>
+   <alias
+   match="mpordel *"
+   enabled="y"
+   expand_variables="y"
+   send_to="10"
+   sequence="100"
+  >
+  <send>mapper delete portal %1</send>
+  </alias>
+  </aliases>
+
+<aliases>
+  <alias
+   script="OnHelp"
+   match="mninja help"
+   enabled="y"
+  >
+  </alias>
+   <alias
+   match="mxs"
+   enabled="y"
+   expand_variables="n"
+   send_to="10"
+   sequence="100"
+  >
+  <send>xset mark</send>
+  </alias>
+  <alias
+   match="mlporbag"
+   enabled="y"
+   expand_variables="y"
+   sequence="100"
+  >
+  <send>examine @portals_bag</send>
+  </alias>
+  <alias
+   match="mimt"
+   enabled="y"
+   send_to="10"
+   sequence="100"
+  >
+  <send>mapper ignore mismatch true</send>
+  </alias>
+  <alias
+   match="mimf"
+   enabled="y"
+   send_to="10"
+   sequence="100"
+  >
+  <send>mapper ignore mismatch false</send>
+  </alias>
+  <alias
+   match="mnpt *"
+   enabled="y"
+   send_to="10"
+   sequence="100"
+  >
+  <send>mapper noportal %1 true</send>
+  </alias>
+  <alias
+   match="mnpf *"
+   enabled="y"
+   send_to="10"
+   sequence="100"
+  >
+  <send>mapper noportal %1 false</send>
+  </alias>
+  <alias
+   match="mnrt *"
+   enabled="y"
+   send_to="10"
+   sequence="100"
+  >
+  <send>mapper norecall %1 true</send>
+  </alias>
+  <alias
+   match="mnrf *"
+   enabled="y"
+   send_to="10"
+   sequence="100"
+  >
+  <send>mapper norecall %1 false</send>
+  </alias>
+  <alias
+   match="open"
+   enabled="y"
+   expand_variables="y"
+   sequence="100"
+  >
+  <send>open n
+  open e
+  open s
+  open w
+  open u
+  open d
+  </send>
+  </alias>
+  <alias
+   match="close"
+   enabled="y"
+   expand_variables="y"
+   sequence="100"
+  >
+  <send>close n
+  close e
+  close s
+  close w
+  close u
+  close d
+  </send>
+  </alias>
+  <alias
+   match="closel"
+   enabled="y"
+   expand_variables="y"
+   sequence="100"
+  >
+  <send>close n
+  close e
+  close s
+  close w
+  close u
+  close d
+  lock n
+  lock e
+  lock s
+  lock w
+  lock u
+  lock d
+  </send>
+  </alias>
+
+</aliases>
+
+<script>
+<![CDATA[
+function OnHelp ()
+  world.Note (world.GetPluginInfo (world.GetPluginID (), 3))
+end
+
+]]>
+</script> 
+
+</muclient>
