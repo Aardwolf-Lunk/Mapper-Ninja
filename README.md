@@ -36,7 +36,7 @@ mdb *  --->  searches mapper database for room * (whole database)
 
 *** MAPPER PORTALS ***
 
-mpor1 *                 --->  takes you to the destination of portal *
+mpor *                  --->  takes you to the destination of portal *
 mapper portal mpor *    --->  enters portal * into mapper database
 mporbag *               --->  sets * as portals bag
 mporbag                 --->  displays portals bag
