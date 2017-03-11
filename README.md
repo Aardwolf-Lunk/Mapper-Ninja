@@ -57,7 +57,6 @@ mxs     --->  sets target room (the room you are in) for current area (requires 
 open    --->  attempts to open all compass direction (n,e,s,w,u,d)
 close   --->  attempts to close all compass directions (n,e,s,w,u,d)
 closel  --->  attempts to close and lock all compass directions (n,e,s,w,u,d)
-----
 mimt    --->  sets current room to mapper ignore mismatch = "true" (use in mazes or rooms where a normal cexit doesn't work)
 mimf    --->  sets current room to mapper ignore mismatch = "false" (if accidentally set to true and any cexit is not working as intended)
 mnpt *  --->  sets current room * (room I.D use "mr") to no-portal = "true" (use if you already know the room is no-portal)
@@ -65,8 +64,7 @@ mnpf *  --->  sets current room * (room I.D use "mr") to no-portal = "false" (us
 mnrt *  --->  sets current room * (room I.D use "mr") to no-recall = "true" (use if you already know the room is no-recall)
 mnrf *  --->  sets current room * (room I.D use "mr") to no-recall = "false" (use if you mistakenly used mnrt)
 rtp     --->  takes you to the beginning of the upper and lower planes so long as you have amulet of the planes in your portals bag
-----
 
-*NOTE* : mapper ignore mismatch is default to false for all rooms in the standard MUSHclient package
+*NOTE 1* : mapper ignore mismatch is default to false for all rooms in the standard MUSHclient package
 *NOTE 2* : mapper no-portal is default to false for all rooms in the standard MUSHclient package
 *NOTE 3* : the mapper will always take the quickest path with ww's xrt including rooms set as no-portal and/or no recall
