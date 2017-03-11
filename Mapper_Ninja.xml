@@ -56,7 +56,7 @@ mdb *  --->  searches mapper database for room * (whole database)
 
 *** MAPPER PORTALS ***
 
-mpor1 *                 --->  takes you to the destination of portal *
+mpor *                  --->  takes you to the destination of portal *
 mapper portal mpor *    --->  enters portal * into mapper database
 mporbag *               --->  sets * as portals bag
 mporbag                 --->  displays portals bag
@@ -192,7 +192,7 @@ rtp     --->  takes you to the beginning of the upper and lower planes so long a
   <send>mapper goto %1</send>
   </alias>
   <alias
-   match="mpor1 *"
+   match="mpor *"
    enabled="y"
    expand_variables="y"
    group="map"
