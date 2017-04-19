@@ -62,6 +62,8 @@ mporbag *               --->  sets * as portals bag
 mporbag                 --->  displays portals bag
 mhold *                 --->  sets hold item * for mapper portal database entry/general use
 mhold                   --->  displays hold item
+mputpor *               --->  puts portal * into portals bag
+mgetpor *               --->  gets portal * from portals bag
 mporlist                --->  lists all portal mapper database entrys
 mpordel #*              --->  deletes portal entry * where * is the portal index (#)
 mlporbag                --->  looks (examines) your portals bag to show which portals you have
@@ -356,6 +358,23 @@ Note ("Hold Item Set To : ", "%1")</send>
   >
   <send>mapper delete portal %1</send>
   </alias>
+   <alias
+   match="mputpor *"
+   enabled="y"
+   expand_variables="y"
+   sequence="100"
+  >
+  <send>put %1 @portals_bag</send>
+  </alias>
+   <alias
+   match="mgetpor *"
+   enabled="y"
+   expand_variables="y"
+   sequence="100"
+  >
+  <send>get %1 @portals_bag</send>
+  </alias>
+
   </aliases>
 
 <aliases>
